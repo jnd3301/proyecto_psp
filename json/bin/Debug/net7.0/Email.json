@@ -1,0 +1,6 @@
+{
+  "email_origen": "jona@correo.com",
+  "email_destino": "rober@correo.com",
+  "asunto": "Saludo!",
+  "cuerpo": "Este es el cuerpo de mi mensaje!"
+}
