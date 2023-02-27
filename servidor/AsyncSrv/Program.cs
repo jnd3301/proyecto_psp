@@ -7,6 +7,7 @@ using System.Threading;
 using System.Text;
 using System.Xml.Serialization;
 using MsgLib;
+using json;
 
 namespace AsyncSrv
 {
@@ -144,7 +145,7 @@ namespace AsyncSrv
 
         private static void Send(Socket handler, Mensaje data)
         {
-            // Convert the message
+            //// Convert the message
             XmlSerializer serializer = new XmlSerializer(typeof(Mensaje));
             Stream stream = new MemoryStream();
             serializer.Serialize(stream, data);
