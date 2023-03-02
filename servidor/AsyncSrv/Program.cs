@@ -7,7 +7,6 @@ using System.Threading;
 using System.Text;
 using System.Xml.Serialization;
 using MsgLib;
-using json;
 
 namespace AsyncSrv
 {
@@ -27,12 +26,14 @@ namespace AsyncSrv
     public class AsynchronousSocketListener
     {
         private static int PORT = 11000;
+        private static String numMenu = "";
 
         // Thread signal.  
         public static ManualResetEvent allDone = new ManualResetEvent(false);
 
         public static int Main(String[] args)
         {
+            
             StartListening();
             return 0;
         }
@@ -78,6 +79,7 @@ namespace AsyncSrv
 
         public static void AcceptCallback(IAsyncResult ar)
         {
+            numMenu = System.IO.File.ReadAllText(@"C:/Users/alumTA/Documents/proyectoPSPP/data.txt");
             // Signal the main thread to continue.  
             allDone.Set();
 
@@ -131,7 +133,22 @@ namespace AsyncSrv
                     // All the data has been read from the client. Display it on the console.  
                     Console.WriteLine("Read {0} bytes from socket.\n{1}",
                         byteArray.Length, recibido);
-                    // Echo the data back to the client.  
+
+                    if (numMenu == "1")
+                    {
+                        Console.WriteLine("Opción1");
+                        // Actualizar cuerpo
+                        modifyXML();
+
+                    }else if (numMenu == "2"){
+                        Console.WriteLine("Opción2");
+                        // Borrar mail
+                    }else
+                    {
+                        Console.WriteLine("Opción3");
+                    }
+
+                    // Echo the data back to the client. 
                     Send(handler, recibido);
                 }
                 else
@@ -141,6 +158,17 @@ namespace AsyncSrv
                 }
             }
 
+        }
+
+        private static void modifyXML()
+        {
+            //XmlDocument doc = new XmlDocument();
+            //doc.Load(@"C:\WINDOWS\Temp\exm.xml");
+            //XmlNode root = doc.DocumentElement["Starttime"];
+            //root.FirstChild.InnerText = "First";
+            //XmlNode root1 = doc.DocumentElement["Changetime"];
+            //root1.FirstChild.InnerText = "Second";
+            //doc.Save(@"C:\WINDOWS\Temp\exm.xml");
         }
 
         private static void Send(Socket handler, Mensaje data)
