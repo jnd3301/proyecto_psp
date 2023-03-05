@@ -38,6 +38,7 @@ namespace AsyncCli
 
         public static int Main(String[] args)
         {
+            menu();
             StartClient();
             return 0;
         }
@@ -45,6 +46,9 @@ namespace AsyncCli
         private static void StartClient()
         {
             // Connect to a remote device.  
+
+            
+
             try
             {
                 // Establish the remote endpoint for the socket. 
@@ -82,6 +86,53 @@ namespace AsyncCli
             catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
+            }
+        }
+
+        private static void menu()
+        {
+            bool salir = false;
+            int opcion = 0;
+            int opcion2 = 0;
+            while (!salir)
+            {
+
+                Console.WriteLine("1. Actualizar el cuerpo");
+                Console.WriteLine("2. Borrar el mail");
+                Console.WriteLine("3. Salir");
+                Console.WriteLine("Elige una de las opciones");
+                opcion = Convert.ToInt32(Console.ReadLine());
+                if (opcion == 3)
+                {
+                    salir = true;
+                }
+                else
+                {
+                    opcion2 = opcion;
+                }
+            }
+            writeFile(opcion2);
+        }
+
+
+        private static void writeFile(int opcion)
+        {
+            try
+            {
+                //Pass the filepath and filename to the StreamWriter Constructor
+                StreamWriter sw = new StreamWriter("C:/Users/alumTA/Documents/proyectoPSPP/data.txt");
+                //Write a line of text
+                sw.Write(opcion.ToString());
+                //Close the file
+                sw.Close();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Exception: " + e.Message);
+            }
+            finally
+            {
+                Console.WriteLine("Executing finally block.");
             }
         }
 
