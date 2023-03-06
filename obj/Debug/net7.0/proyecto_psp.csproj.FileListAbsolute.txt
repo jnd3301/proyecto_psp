@@ -1,0 +1,5 @@
+C:\Users\alumTA\Desktop\PSEP\proyecto_psp\obj\Debug\net7.0\proyecto_psp.csproj.AssemblyReference.cache
+C:\Users\alumTA\Desktop\PSEP\proyecto_psp\obj\Debug\net7.0\proyecto_psp.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\alumTA\Desktop\PSEP\proyecto_psp\obj\Debug\net7.0\proyecto_psp.AssemblyInfoInputs.cache
+C:\Users\alumTA\Desktop\PSEP\proyecto_psp\obj\Debug\net7.0\proyecto_psp.AssemblyInfo.cs
+C:\Users\alumTA\Desktop\PSEP\proyecto_psp\obj\Debug\net7.0\proyecto_psp.csproj.CoreCompileInputs.cache
