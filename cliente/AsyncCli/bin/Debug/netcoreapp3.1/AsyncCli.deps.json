@@ -1,0 +1,36 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v3.1",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v3.1": {
+      "AsyncCli/1.0.0": {
+        "dependencies": {
+          "MsgLib": "1.0.0"
+        },
+        "runtime": {
+          "AsyncCli.dll": {}
+        }
+      },
+      "MsgLib/1.0.0": {
+        "runtime": {
+          "MsgLib.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "AsyncCli/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "MsgLib/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

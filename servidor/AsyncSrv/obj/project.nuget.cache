@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "n/EL9UY8TF/LEtMcOQGpWGPi9n+2OcZNramidbgP7DLJm3c6usShVlYG+td6kb28k2Hz+Fll9JKglkk6Pb1DSQ==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\alumTA\\Documents\\proyectoPSPP\\proyecto_psp\\servidor\\AsyncSrv\\AsyncSrv.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\alumTA\\.nuget\\packages\\restsharp\\108.0.3\\restsharp.108.0.3.nupkg.sha512",
+    "C:\\Users\\alumTA\\.nuget\\packages\\system.text.json\\5.0.1\\system.text.json.5.0.1.nupkg.sha512"
+  ],
+  "logs": []
+}

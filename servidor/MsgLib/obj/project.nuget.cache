@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "2CCBDfnRAwOD4O26Ego7kUi8iLq+aw5/5eIgk6a6Ad5k2kB2WZaelri8mETc1zzezabWRBTef/KXn14d1Ulzkw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\alumTA\\Documents\\proyectoPSPP\\proyecto_psp\\servidor\\MsgLib\\MsgLib.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\alumTA\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "C:\\Users\\alumTA\\.nuget\\packages\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}
