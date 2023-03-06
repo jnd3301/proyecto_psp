@@ -7,6 +7,7 @@ using System.Threading;
 using System.Text;
 using System.Xml.Serialization;
 using MsgLib;
+using System.Security.Cryptography;
 
 namespace AsyncSrv
 {
@@ -26,12 +27,14 @@ namespace AsyncSrv
     public class AsynchronousSocketListener
     {
         private static int PORT = 11000;
+        private static String numMenu = "";
 
         // Thread signal.  
         public static ManualResetEvent allDone = new ManualResetEvent(false);
 
         public static int Main(String[] args)
         {
+            
             StartListening();
             return 0;
         }
@@ -77,6 +80,7 @@ namespace AsyncSrv
 
         public static void AcceptCallback(IAsyncResult ar)
         {
+            numMenu = System.IO.File.ReadAllText(@"C:/Users/alumTA/Documents/proyectoPSPP/data.txt");
             // Signal the main thread to continue.  
             allDone.Set();
 
@@ -130,7 +134,22 @@ namespace AsyncSrv
                     // All the data has been read from the client. Display it on the console.  
                     Console.WriteLine("Read {0} bytes from socket.\n{1}",
                         byteArray.Length, recibido);
-                    // Echo the data back to the client.  
+
+                    if (numMenu == "1")
+                    {
+                        Console.WriteLine("Opción1");
+                        // Actualizar cuerpo
+                        modifyXML();
+
+                    }else if (numMenu == "2"){
+                        Console.WriteLine("Opción2");
+                        // Borrar mail
+                    }else
+                    {
+                        Console.WriteLine("Opción3");
+                    }
+
+                    // Echo the data back to the client. 
                     Send(handler, recibido);
                 }
                 else
@@ -142,9 +161,28 @@ namespace AsyncSrv
 
         }
 
+        private static void modifyXML()
+        {
+            //XmlDocument doc = new XmlDocument();
+            //doc.Load(@"C:\WINDOWS\Temp\exm.xml");
+            //XmlNode root = doc.DocumentElement["Starttime"];
+            //root.FirstChild.InnerText = "First";
+            //XmlNode root1 = doc.DocumentElement["Changetime"];
+            //root1.FirstChild.InnerText = "Second";
+            //doc.Save(@"C:\WINDOWS\Temp\exm.xml");
+        }
+
         private static void Send(Socket handler, Mensaje data)
         {
-            // Convert the message
+            //// Convert the message
+            ///
+
+
+            // Enscriptar el cuerpo
+
+
+
+            // Serializar
             XmlSerializer serializer = new XmlSerializer(typeof(Mensaje));
             Stream stream = new MemoryStream();
             serializer.Serialize(stream, data);
@@ -153,6 +191,68 @@ namespace AsyncSrv
             handler.BeginSend(byteData, 0, byteData.Length, 0,
             new AsyncCallback(SendCallback), handler);
         }
+
+        private static Aes getAes()
+        {
+            Aes myAes = Aes.Create();
+            myAes.Key = Convert.FromBase64String("123");
+            myAes.IV = Convert.FromBase64String("123");
+            return myAes;
+        }
+
+        private static string encrypt(string txt)
+        {
+            using (Aes myAes = getAes())
+            {
+
+                // Encrypt the string to an array of bytes.
+                byte[] encrypted = EncryptStringToBytes_Aes(original, myAes.Key, myAes.IV);
+                return System.Text.Encoding.UTF8.GetString(encrypted);
+            }
+        }
+
+        static byte[] EncryptStringToBytes_Aes(string plainText, byte[] Key, byte[] IV)
+        {
+            // Check arguments.
+            if (plainText == null || plainText.Length <= 0)
+                throw new ArgumentNullException("plainText");
+            if (Key == null || Key.Length <= 0)
+                throw new ArgumentNullException("Key");
+            if (IV == null || IV.Length <= 0)
+                throw new ArgumentNullException("IV");
+            byte[] encrypted;
+
+            // Create an Aes object
+            // with the specified key and IV.
+            using (Aes aesAlg = Aes.Create())
+            {
+                aesAlg.Key = Key;
+                aesAlg.IV = IV;
+
+                // Create an encryptor to perform the stream transform.
+                ICryptoTransform encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
+
+                // Create the streams used for encryption.
+                using (MemoryStream msEncrypt = new MemoryStream())
+                {
+                    using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
+                    {
+                        using (StreamWriter swEncrypt = new StreamWriter(csEncrypt))
+                        {
+                            //Write all data to the stream.
+                            swEncrypt.Write(plainText);
+                        }
+                        encrypted = msEncrypt.ToArray();
+                    }
+                }
+            }
+
+
+            // Return the encrypted bytes from the memory stream.
+            return encrypted;
+
+        }
+
 
         private static void SendCallback(IAsyncResult ar)
         {

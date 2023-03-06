@@ -1,0 +1,15 @@
+C:\Users\jdrx9\source\repos\json\bin\Debug\net7.0\json.exe
+C:\Users\jdrx9\source\repos\json\bin\Debug\net7.0\json.deps.json
+C:\Users\jdrx9\source\repos\json\bin\Debug\net7.0\json.runtimeconfig.json
+C:\Users\jdrx9\source\repos\json\bin\Debug\net7.0\json.dll
+C:\Users\jdrx9\source\repos\json\bin\Debug\net7.0\json.pdb
+C:\Users\jdrx9\source\repos\json\obj\Debug\net7.0\json.csproj.AssemblyReference.cache
+C:\Users\jdrx9\source\repos\json\obj\Debug\net7.0\json.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\jdrx9\source\repos\json\obj\Debug\net7.0\json.AssemblyInfoInputs.cache
+C:\Users\jdrx9\source\repos\json\obj\Debug\net7.0\json.AssemblyInfo.cs
+C:\Users\jdrx9\source\repos\json\obj\Debug\net7.0\json.csproj.CoreCompileInputs.cache
+C:\Users\jdrx9\source\repos\json\obj\Debug\net7.0\json.dll
+C:\Users\jdrx9\source\repos\json\obj\Debug\net7.0\refint\json.dll
+C:\Users\jdrx9\source\repos\json\obj\Debug\net7.0\json.pdb
+C:\Users\jdrx9\source\repos\json\obj\Debug\net7.0\json.genruntimeconfig.cache
+C:\Users\jdrx9\source\repos\json\obj\Debug\net7.0\ref\json.dll

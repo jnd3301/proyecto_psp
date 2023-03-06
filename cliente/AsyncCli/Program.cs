@@ -7,6 +7,7 @@ using System.Threading;
 using System.Text;
 using System.Xml.Serialization;
 using MsgLib;
+using System.Security.Cryptography;
 
 namespace AsyncCli
 {
@@ -38,6 +39,7 @@ namespace AsyncCli
 
         public static int Main(String[] args)
         {
+            menu();
             StartClient();
             return 0;
         }
@@ -45,6 +47,9 @@ namespace AsyncCli
         private static void StartClient()
         {
             // Connect to a remote device.  
+
+            
+
             try
             {
                 // Establish the remote endpoint for the socket. 
@@ -82,6 +87,53 @@ namespace AsyncCli
             catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
+            }
+        }
+
+        private static void menu()
+        {
+            bool salir = false;
+            int opcion = 0;
+            int opcion2 = 0;
+            while (!salir)
+            {
+
+                Console.WriteLine("1. Actualizar el cuerpo");
+                Console.WriteLine("2. Borrar el mail");
+                Console.WriteLine("3. Salir");
+                Console.WriteLine("Elige una de las opciones");
+                opcion = Convert.ToInt32(Console.ReadLine());
+                if (opcion == 3)
+                {
+                    salir = true;
+                }
+                else
+                {
+                    opcion2 = opcion;
+                }
+            }
+            writeFile(opcion2);
+        }
+
+
+        private static void writeFile(int opcion)
+        {
+            try
+            {
+                //Pass the filepath and filename to the StreamWriter Constructor
+                StreamWriter sw = new StreamWriter("C:/Users/alumTA/Documents/proyectoPSPP/data.txt");
+                //Write a line of text
+                sw.Write(opcion.ToString());
+                //Close the file
+                sw.Close();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Exception: " + e.Message);
+            }
+            finally
+            {
+                Console.WriteLine("Executing finally block.");
             }
         }
 
@@ -231,6 +283,69 @@ namespace AsyncCli
             {
                 Console.WriteLine(e.ToString());
             }
+        }
+
+        private static Aes getAes()
+        {
+            Aes myAes = Aes.Create();
+            myAes.Key = Convert.FromBase64String("123");
+            myAes.IV = Convert.FromBase64String("123");
+            return myAes;
+        }
+
+        private static string decrypt()
+        {
+            using (Aes myAes = getAes())
+            {
+                // Decrypt the bytes to a string.
+                string decrypt = DecryptStringFromBytes_Aes(encrypted, myAes.Key, myAes.IV);
+                return decrypt;
+            }
+        }
+
+        static string DecryptStringFromBytes_Aes(byte[] cipherText, byte[] Key, byte[] IV)
+        {
+            // Check arguments.
+            if (cipherText == null || cipherText.Length <= 0)
+                throw new ArgumentNullException("cipherText");
+            if (Key == null || Key.Length <= 0)
+                throw new ArgumentNullException("Key");
+            if (IV == null || IV.Length <= 0)
+                throw new ArgumentNullException("IV");
+
+            // Declare the string used to hold
+            // the decrypted text.
+            string plaintext = null;
+
+            // Create an Aes object
+            // with the specified key and IV.
+            using (Aes aesAlg = Aes.Create())
+            {
+                aesAlg.Key = Key;
+                aesAlg.IV = IV;
+
+                // Create a decryptor to perform the stream transform.
+                ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
+
+                // Create the streams used for decryption.
+                using (MemoryStream msDecrypt = new MemoryStream(cipherText))
+                {
+                    using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
+                    {
+                        using (StreamReader srDecrypt = new StreamReader(csDecrypt))
+                        {
+
+                            // Read the decrypted bytes from the decrypting stream
+                            // and place them in a string.
+                            plaintext = srDecrypt.ReadToEnd();
+                        }
+                    }
+                }
+
+            }
+
+            return plaintext;
+
         }
 
     }
