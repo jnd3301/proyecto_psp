@@ -8,6 +8,9 @@ using System.Text;
 using System.Xml.Serialization;
 using MsgLib;
 using System.Security.Cryptography;
+using System.Text.Json;
+using static AsyncSrv.Email;
+using AsyncSrv;
 
 namespace AsyncCli
 {
@@ -186,14 +189,17 @@ namespace AsyncCli
 
         private static void Send(Socket handler, Mensaje data)
         {
-            // Convert the message
-            XmlSerializer serializer = new XmlSerializer(typeof(Mensaje));
+            //// Convert the message
+            
+            // Serializar
+            // XmlSerializer serializer = new XmlSerializer(typeof(Mensaje));
+            var desserialize = JsonSerializer.Deserialize(data.ToString());
             Stream stream = new MemoryStream();
-            serializer.Serialize(stream, data);
-            byte[] byteData = ((MemoryStream)stream).ToArray();
+            //serializer.Serialize(stream, data);
+            byte[] byteData = Encoding.UTF8.GetBytes(serializer);
             // Begin sending the data to the remote device.  
             handler.BeginSend(byteData, 0, byteData.Length, 0,
-                                new AsyncCallback(SendCallback), handler);
+            new AsyncCallback(SendCallback), handler);
         }
 
         private static void SendCallback(IAsyncResult ar)
@@ -202,6 +208,7 @@ namespace AsyncCli
             {
                 // Retrieve the socket from the state object.  
                 Socket client = (Socket)ar.AsyncState;
+                // var data = client.BeginReceive();
 
                 // Complete sending the data to the remote device.  
                 int bytesSent = client.EndSend(ar);
@@ -269,6 +276,10 @@ namespace AsyncCli
                         MemoryStream stream = new MemoryStream(byteArray);
                         Mensaje recibido = (Mensaje)new XmlSerializer(typeof(Mensaje)).Deserialize(stream);
 
+
+                        // AQUI RECIBE EL CUERPO DEL EMAIL
+
+
                     }
                     else
                     {
@@ -293,12 +304,12 @@ namespace AsyncCli
             return myAes;
         }
 
-        private static string decrypt()
+        private static string decrypt(string txt)
         {
             using (Aes myAes = getAes())
             {
                 // Decrypt the bytes to a string.
-                string decrypt = DecryptStringFromBytes_Aes(encrypted, myAes.Key, myAes.IV);
+                string decrypt = DecryptStringFromBytes_Aes(Encoding.UTF8.GetBytes(txt), myAes.Key, myAes.IV);
                 return decrypt;
             }
         }

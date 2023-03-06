@@ -8,6 +8,8 @@ using System.Text;
 using System.Xml.Serialization;
 using MsgLib;
 using System.Security.Cryptography;
+using RestSharp;
+using System.Text.Json;
 
 namespace AsyncSrv
 {
@@ -26,6 +28,7 @@ namespace AsyncSrv
 
     public class AsynchronousSocketListener
     {
+        private const string BASEURL = "https://localhost:7053/";
         private static int PORT = 11000;
         private static String numMenu = "";
 
@@ -80,7 +83,6 @@ namespace AsyncSrv
 
         public static void AcceptCallback(IAsyncResult ar)
         {
-            numMenu = System.IO.File.ReadAllText(@"C:/Users/alumTA/Documents/proyectoPSPP/data.txt");
             // Signal the main thread to continue.  
             allDone.Set();
 
@@ -139,7 +141,6 @@ namespace AsyncSrv
                     {
                         Console.WriteLine("Opción1");
                         // Actualizar cuerpo
-                        modifyXML();
 
                     }else if (numMenu == "2"){
                         Console.WriteLine("Opción2");
@@ -161,32 +162,25 @@ namespace AsyncSrv
 
         }
 
-        private static void modifyXML()
-        {
-            //XmlDocument doc = new XmlDocument();
-            //doc.Load(@"C:\WINDOWS\Temp\exm.xml");
-            //XmlNode root = doc.DocumentElement["Starttime"];
-            //root.FirstChild.InnerText = "First";
-            //XmlNode root1 = doc.DocumentElement["Changetime"];
-            //root1.FirstChild.InnerText = "Second";
-            //doc.Save(@"C:\WINDOWS\Temp\exm.xml");
-        }
-
         private static void Send(Socket handler, Mensaje data)
         {
-            //// Convert the message
-            ///
+            var client = new RestClient(BASEURL);
 
-
-            // Enscriptar el cuerpo
-
-
+            var request = new RestRequest("TodoItems", Method.Get);
+            var response = client.Execute(request);
+            //Console.WriteLine(response.Content);
+            var json = Email.ListFromJson(response.Content);
+            Console.WriteLine(json[0].Cuerpo);
+            // Enscriptar el cuerp
+            var jsonEncrypt = encrypt(json[0].Cuerpo);
+            Console.WriteLine(jsonEncrypt);
 
             // Serializar
-            XmlSerializer serializer = new XmlSerializer(typeof(Mensaje));
+            // XmlSerializer serializer = new XmlSerializer(typeof(Mensaje));
+            var serializer = JsonSerializer.Serialize(jsonEncrypt);
             Stream stream = new MemoryStream();
-            serializer.Serialize(stream, data);
-            byte[] byteData = ((MemoryStream)stream).ToArray();
+            //serializer.Serialize(stream, data);
+            byte[] byteData = Encoding.UTF8.GetBytes(serializer);
             // Begin sending the data to the remote device.  
             handler.BeginSend(byteData, 0, byteData.Length, 0,
             new AsyncCallback(SendCallback), handler);
@@ -195,8 +189,12 @@ namespace AsyncSrv
         private static Aes getAes()
         {
             Aes myAes = Aes.Create();
-            myAes.Key = Convert.FromBase64String("123");
-            myAes.IV = Convert.FromBase64String("123");
+            byte[] key = Encoding.UTF8.GetBytes("123");
+            Array.Resize(ref key, 32);
+            byte[] iv = Encoding.UTF8.GetBytes("123");
+            Array.Resize(ref iv, 16);
+            myAes.Key = key;
+            myAes.IV = iv;
             return myAes;
         }
 
@@ -206,7 +204,7 @@ namespace AsyncSrv
             {
 
                 // Encrypt the string to an array of bytes.
-                byte[] encrypted = EncryptStringToBytes_Aes(original, myAes.Key, myAes.IV);
+                byte[] encrypted = EncryptStringToBytes_Aes(txt, myAes.Key, myAes.IV);
                 return System.Text.Encoding.UTF8.GetString(encrypted);
             }
         }

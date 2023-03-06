@@ -10,9 +10,6 @@ var app = builder.Build();
 app.MapGet("/todoitems", async (EmailDb db) =>
     await db.Todos.ToListAsync());
 
-//app.MapGet("/todoitems/complete", async (EmailDb db) =>
-//    await db.Todos.Where(t => t.IsComplete).ToListAsync());
-
 app.MapGet("/todoitems/{id}", async (int id, EmailDb db) =>
     await db.Todos.FindAsync(id)
         is Email todo
